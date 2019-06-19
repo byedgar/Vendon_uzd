@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+/* design main box */
+.square {
+  width: 800px; /* square size*/
+  position: fixed; 
+  top: 50%;	
+  left: 50%;
+  transform: translate(-50%, -50%); /* Make square in middle of screen*/
+  margin: 0;
+}
+
+/* Responsive for mobile  */
+@media only screen and (max-width: 800px) {
+	.square {
+		width: 100% !important;
+	}
+	
+	input[type=text],input[type=submit], select{ 
+		width: 100%;
+	}
+	
+	.content_center {
+	font-size:4vw; /* Font size 3% from viewport width*/
+	}
+	li.list {
+		width: 100% !important;
+	}
+}
+
+/* design text and aligment of box */
+.content_center {
+text-align: center;
+font-size:3vw; /* Font size 3% from viewport width*/
+
+}
+/* Removing margins from paragraph */
+p.no_margin{
+    margin: 0;	
+}
+/* design input text and submit buttons */
+input[type=text],input[type=submit], select{ 
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 2vw;
+}
+
+ul.atbildes
+{
+	width: 100%;
+	padding: 0; /* remove default padding and all margins! */
+    margin: 0;
+	/* remove the • */
+    list-style: none;
+	list-style-type: none; 
+	
+}
+/* Design how answers looks */
+li.list {
+    display: inline-block;
+	width: 50%;
+	max-width: 100%;
+	height: 50%
+	text-align: center;
+	vertical-align: middle;
+}
+
+/* remove radio box icon */
+input.hidden {
+    visibility:hidden;
+}
+/* enable label input */
+label {
+    cursor: pointer;
+}
+/* color selected answers  */
+input:checked + label {
+    background: green;
+}
+
+
+
+/* Making step circles */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: grey;
+  border: none; 
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+/* Mark the active step  */
+.step.active {
+  opacity: 1;
+  background-color: yellow;
+}
+/* Mark complited steps */
+.step.complete {
+  background-color: green;
+}
