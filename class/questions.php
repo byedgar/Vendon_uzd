@@ -9,20 +9,32 @@ class questions {
         }
         return self::$_instance;
     }
-
+/**
+ * Empty constructor
+ */
     function questions() {
        
     }
-    
+    /**
+     * Function Get all active tests
+     * @param type $mysqli - Mysqli connection
+     * @return html option values
+     */
     function select_names( $mysqli ){
     $options = '';
     $result = $mysqli->query("SELECT id,name FROM questionnaire WHERE active =1 ORDER BY id DESC");
     while($showtablerow = mysqli_fetch_array($result))
 	{
-		$options.='<option value="'. $showtablerow[0].'">'. $showtablerow[1].'</option>';
+            $options.='<option value="'. $showtablerow[0].'">'. $showtablerow[1].'</option>';
 	}
         return $options;
     }	
+    /**
+     * Function count all questions in test
+     * @param type $mysqli - Mysqli connection
+     * @param type $test_id - test form id
+     * @return int
+     */
     function count_steps($mysqli, $test_id){
 		$result	= $mysqli->query("SELECT MAX( q.order ) FROM questions q INNER JOIN answers a ON a.q_id = q.id WHERE q.name_id =$test_id");
 		while($count = mysqli_fetch_array($result))
@@ -30,6 +42,12 @@ class questions {
 		 return $steps;
     }
     
+    /**
+     * Function count all questions in test by user_id
+     * @param type $mysqli - Mysqli connection
+     * @param type $user_id - User id from DB
+     * @return int
+     */
     function count_steps_from_uid($mysqli, $user_id){
 		$result	= $mysqli->query("SELECT MAX( q.order ) FROM questions q INNER JOIN answers a ON a.q_id = q.id WHERE q.name_id =(SELECT form_id from peoples WHERE id=$user_id)");
 		while($count = mysqli_fetch_array($result))
@@ -37,13 +55,18 @@ class questions {
 		 return $steps;
     }
     
-    
-    function question_name($mysqli, $name, $id){
+    /**
+     * Function get question name by order id
+     * @param type $mysqli - Mysqli connection
+     * @param type $test_id - test form id
+     * @return String 
+     */
+    function question_name($mysqli, $test_id, $order_id){
 		$sql = "
 		SELECT q.questions
 		FROM questions q
-		WHERE q.name_id =$name
-		AND q.order =$id
+		WHERE q.name_id =$test_id
+		AND q.order =$order_id
 		";
 		$result	= $mysqli->query($sql);
 		while($data = mysqli_fetch_array($result))
@@ -51,13 +74,19 @@ class questions {
 		if($nos){ return $nos;}
 		
 	}
-        
-    	function question_answers($mysqli, $name, $id){
+     /**
+     * Function get all answers
+     * @param type $mysqli - Mysqli connection
+     * @param type $form_id - form id from DB
+     * @param type $qid - question id
+     * @return String 
+     */
+    	function question_answers($mysqli, $form_id, $qid){
 		$sql = "
 		SELECT a.id, a.answer FROM questions q
 				INNER JOIN answers a ON a.q_id = q.id
-				WHERE q.name_id = $name
-				AND q.order = $id
+				WHERE q.name_id = $form_id
+				AND q.order = $qid
 				ORDER BY RAND()
 		";
 		$result	= $mysqli->query($sql);
@@ -75,7 +104,14 @@ class questions {
 		 return $data;
 		
 	}
-        function get_correct_answers($mysqli, $id){
+        
+        /**
+         * Function count correct answers by user_id
+         * @param type $mysqli - Mysqli connection
+         * @param type $uid
+         * @return int
+         */
+        function get_correct_answers($mysqli, $uid){
 		
 		$sql = "
 		SELECT count(*) FROM peoples p
@@ -86,16 +122,19 @@ class questions {
 		$result	= $mysqli->query($sql);
 		while($data = mysqli_fetch_array($result))
 		{$skaits =$data[0];}
-		 mysqli_free_result($result);
-		 if($skaits){ return $skaits;}else{return 0;}
-		
+		if($skaits){ return $skaits;}else{return 0;}	
 	}	
-        
-        function get_vards_from_id($mysqli, $id){
+        /**
+         * Function get firstname by user_id
+         * @param type $mysqli - Mysqli connection
+         * @param type $uid - User id from DB
+         * @return String
+         */
+        function get_vards_from_id($mysqli, $uid){
 		
 		$sql = "
 		SELECT name FROM peoples
-		WHERE id =$id
+		WHERE id =$uid
 		";
 		$result	= $mysqli->query($sql);
 		while($data = mysqli_fetch_array($result))
