@@ -6,7 +6,10 @@ $mysqli = $db->getConnection();
 include "/class/questions.php";
 $questions = new questions();
 
-print_r($_POST);
+/**
+ * TODO
+ * Prevent direct access to POST data
+ */
 if(isset($_POST['firstname']))    
     $firstname=$_POST['firstname']; 
 if(isset($_POST['tests']))   
@@ -15,28 +18,31 @@ if(isset($_POST['datums']))
     $datums=$_POST['datums']; // Get start datetime
 if(isset($_POST['atbilde']))  
     $answer_id=$_POST['atbilde'];
-
-$steps= $questions->count_steps($mysqli, $test_id); // Counting all questions by form_id
-
-IF($_SESSION["uid"] >0){ $user_id=$_SESSION["uid"];} //Getting user_id from Session
+ 
+//Counting all questions by form_id
+$steps= $questions->count_steps($mysqli, $test_id);
+//Getting user_id from Session
+IF($_SESSION["uid"] >0){ $user_id=$_SESSION["uid"];}
 
 $prev=0; // Initializing first question for Javascript Step function
-if(isset($_POST['jautajums'])) 
+if(isset($_POST['jautajums']) && $_POST['jautajums'] > 0) 
 {
     $jautajums = $_POST['jautajums'];
     $jautajums++;
+    // Insert people answers to DB
     $sql = "INSERT INTO people_answ (people_id,answer_id) VALUES ('$user_id', '$answer_id')";
     $result = $mysqli->query($sql);
     $prev=$jautajums-1;
 }
 else {
     $jautajums = 1;
+    //Adding new users to DB
     $sql = "INSERT INTO peoples (form_id,name,start) VALUES ('$test_id','$firstname', '$datums')";
     $result = $mysqli->query($sql);
     $user_id=mysqli_insert_id($mysqli);
     $_SESSION["uid"]=$user_id;			
 }
-    echo $jautajums . " " . $steps;
+
 if ($steps==$jautajums)
     $button="Apskatīt rezultātus";
 else
@@ -63,10 +69,12 @@ if($jautajums > $steps){
 	
 			<div class="square" style="display:block"> 
 			<div class="content_center"><b> 
-		<?php echo $questions->question_name($mysqli, $test_id, $jautajums); ?></b><hr> <!-- Get Question name from DB by form_id and question ID -->
+                <!-- Get Question name from DB by form_id and question ID -->
+		<?php echo $questions->question_name($mysqli, $test_id, $jautajums); ?></b><hr> 
 		<form id="form2" method="post" action="questions.php">
 			<ul class="atbildes">
-			<?php echo $questions->question_answers($mysqli, $test_id, $jautajums); ?> <!-- Get Question answers from DB by form_id and question ID -->
+                        <!-- Get Question answers from DB by form_id and question ID -->    
+			<?php echo $questions->question_answers($mysqli, $test_id, $jautajums); ?> 
 			</ul>
 	      <input type="submit" value="<?php echo $button; ?>" />
 	      <input type="hidden" name="jautajums" value="<?php echo $jautajums; ?>" /> 
@@ -76,9 +84,9 @@ if($jautajums > $steps){
 		</form>
 			<div style="text-align:center">
 			<?php
-			if($steps>0){
-			for( $z= 1 ; $z <= $steps ; $z++ ){echo '<span class="step"></span>';} //Get list of all questions 
-			}
+                            if($steps>0){
+                                for( $z= 1 ; $z <= $steps ; $z++ ){echo '<span class="step"></span>';} //Get list of all questions 
+                            }
 			?>
 			</div>
 		</div>
@@ -88,9 +96,9 @@ if($jautajums > $steps){
 	<script src="/assets/js/quest.js" type="text/javascript"></script> <!-- connecting step script -->
 		<?php
 		if($prev OR $prev==0){
-			echo '<script type="text/javascript">',
-				'fixStepIndicator('.$prev.');',
-				'</script>';
+                    echo '<script type="text/javascript">',
+                         'fixStepIndicator('.$prev.');',
+			 '</script>';
 		}
 
 	
