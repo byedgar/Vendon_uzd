@@ -22,10 +22,15 @@ class questions {
      */
     function select_names( $mysqli ){
     $options = '';
-    $result = $mysqli->query("SELECT id,name FROM questionnaire WHERE active =1 ORDER BY id DESC");
+    $result = $mysqli->query("
+        SELECT q.id, q.name,count(qq.name_id)
+        FROM questionnaire q
+        INNER JOIN questions qq on qq.name_id = q.id
+        WHERE q.active =1
+        group by q.id,q.name");
     while($showtablerow = mysqli_fetch_array($result))
 	{
-            $options.='<option value="'. $showtablerow[0].'">'. $showtablerow[1].'</option>';
+            $options.='<option value="'. $showtablerow[0].'">'. $showtablerow[1].' ('. $showtablerow[2].' questions)</option>';
 	}
         return $options;
     }	
@@ -117,7 +122,7 @@ class questions {
 		SELECT count(*) FROM peoples p
 		INNER JOIN people_answ an on p.id = an.people_id
 		INNER JOIN answers a on a.id = an.answer_id
-		WHERE p.id=$id and a.correct=1
+		WHERE p.id=$uid and a.correct=1
 		";
 		$result	= $mysqli->query($sql);
 		while($data = mysqli_fetch_array($result))
