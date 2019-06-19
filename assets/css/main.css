@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 /* design main box */
 .square {
   width: 800px; /* square size*/
@@ -36,10 +37,12 @@ text-align: center;
 font-size:3vw; /* Font size 3% from viewport width*/
 
 }
+
 /* Removing margins from paragraph */
 p.no_margin{
     margin: 0;	
 }
+
 /* design input text and submit buttons */
 input[type=text],input[type=submit], select{ 
   width: 100%;
@@ -60,6 +63,7 @@ ul.atbildes
 	list-style-type: none; 
 	
 }
+
 /* Design how answers looks */
 li.list {
     display: inline-block;
@@ -74,16 +78,16 @@ li.list {
 input.hidden {
     visibility:hidden;
 }
+
 /* enable label input */
 label {
     cursor: pointer;
 }
+
 /* color selected answers  */
 input:checked + label {
     background: green;
 }
-
-
 
 /* Making step circles */
 .step {
@@ -102,6 +106,7 @@ input:checked + label {
   opacity: 1;
   background-color: yellow;
 }
+
 /* Mark completed steps */
 .step.complete {
   background-color: green;
