@@ -83,9 +83,10 @@ class db {
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin AUTO_INCREMENT=0 
         ';
         $this->connection->query($sql);
-        
         $this->connection->query("ALTER TABLE `answers` ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`q_id`) REFERENCES `questions` (`id`)");
         $this->connection->query("ALTER TABLE `questions` ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`name_id`) REFERENCES `questionnaire` (`id`)");
+       
+        
         
     }
 
