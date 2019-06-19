@@ -102,7 +102,7 @@ input:checked + label {
   opacity: 1;
   background-color: yellow;
 }
-/* Mark complited steps */
+/* Mark completed steps */
 .step.complete {
   background-color: green;
 }
