@@ -19,11 +19,18 @@ class db {
     }
 
     private function __construct() {
-        $this->connection = new mysqli($this->host, $this->user, $this->pass, $this->db);
-        mysqli_set_charset( $this->connection,"utf8");
-        if (mysqli_connect_error()) {
-            trigger_error("Failed to conencto to MySQL: " . mysqli_connect_error(), E_USER_ERROR);
+        try {
+            $this->connection = new mysqli($this->host, $this->user, $this->pass, $this->db);
+            mysqli_set_charset( $this->connection,"utf8");
+            if (mysqli_connect_error()) {
+                trigger_error("Failed to connect to MySQL: " . mysqli_connect_error(), E_USER_ERROR);
+                throw new Exception("Failed to connect to MySQL: " . mysqli_connect_error(), E_USER_ERROR);
+               }
         }
+        catch(Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+        }
+        
         
        /**
         * Init tables

@@ -42,9 +42,14 @@ class questions {
      */
     function count_steps($mysqli, $test_id){
 		$result	= $mysqli->query("SELECT MAX( q.order ) FROM questions q INNER JOIN answers a ON a.q_id = q.id WHERE q.name_id =$test_id");
-		while($count = mysqli_fetch_array($result))
-		{$steps =$count[0];}
-		 return $steps;
+		$total_rows = mysqli_fetch_array($result)[0];
+                if($total_rows && $total_rows>0){
+                  return $total_rows;  
+                }else{
+                     trigger_error("Failed to get total questions from Mysql ", E_USER_ERROR);
+                     return 0; 
+                }
+		
     }
     
     /**
@@ -55,9 +60,13 @@ class questions {
      */
     function count_steps_from_uid($mysqli, $user_id){
 		$result	= $mysqli->query("SELECT MAX( q.order ) FROM questions q INNER JOIN answers a ON a.q_id = q.id WHERE q.name_id =(SELECT form_id from peoples WHERE id=$user_id)");
-		while($count = mysqli_fetch_array($result))
-		{$steps =$count[0];}
-		 return $steps;
+		$total_rows = mysqli_fetch_array($result)[0];
+		if($total_rows && $total_rows>0){
+                  return $total_rows;  
+                }else{
+                     trigger_error("Failed to get total questions from Mysql ", E_USER_ERROR);
+                     return 0; 
+                }
     }
     
     /**
@@ -74,9 +83,13 @@ class questions {
 		AND q.order =$order_id
 		";
 		$result	= $mysqli->query($sql);
-		while($data = mysqli_fetch_array($result))
-                {$nos =$data[0];}
-		if($nos){ return $nos;}
+		$nos = mysqli_fetch_array($result)[0];
+		if($nos){
+                     return $nos;  
+                }else{
+                     trigger_error("Failed to get question name from Mysql ", E_USER_ERROR);
+                     return "---"; 
+                }
 		
 	}
      /**
@@ -125,9 +138,13 @@ class questions {
 		WHERE p.id=$uid and a.correct=1
 		";
 		$result	= $mysqli->query($sql);
-		while($data = mysqli_fetch_array($result))
-		{$skaits =$data[0];}
-		if($skaits){ return $skaits;}else{return 0;}	
+		$answers = mysqli_fetch_array($result)[0];
+		if($answers){
+                  return $answers;  
+                }else{
+                     trigger_error("Failed to get correct answers from Mysql ", E_USER_ERROR);
+                     return 0; 
+                }
 	}	
         /**
          * Function get firstname by user_id
@@ -142,12 +159,13 @@ class questions {
 		WHERE id =$uid
 		";
 		$result	= $mysqli->query($sql);
-		while($data = mysqli_fetch_array($result))
-		{$vards =$data[0];}
-		 return $vards;
+		$vards = mysqli_fetch_array($result)[0];
+		if($vards){
+                  return $vards;  
+                }else{
+                     trigger_error("Failed to get firstname from Mysql ", E_USER_ERROR);
+                     return "---"; 
+                }
 	}
-
-
-
 }
 ?>
